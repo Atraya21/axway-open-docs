@@ -290,12 +290,67 @@ After you have created the key pairs and secrets, deploy the Axway proprietary s
     Example:
 
     ```
-    helm upgrade --install --namespace apic-control apic-hybrid axway/apicentral-hybrid -f ./hybridOverride.yaml --set observer.enabled=true --set observer.filebeat.sslVerification=none
-    Release "apic-hybrid" does not exist. Installing it now.
+    helm upgrade --install --namespace apic-control apic-hybrid axway/apicentral-hybrid -f ./hybridOverride.yaml --set als.enabled=true 
+    
+   Release "apic-hybrid" does not exist. Installing it now.
     NAME:   apic-hybrid
-    LAST DEPLOYED: Tue Mar  5 10:57:27 2019
+    LAST DEPLOYED: Wed Aug  5 20:25:53 2020
     NAMESPACE: apic-control
     STATUS: DEPLOYED
+
+    RESOURCES:
+    ==> v1/Deployment
+    NAME             AGE
+    apic-hybrid-als  2s
+
+    ==> v1/Pod(related)
+    NAME                               AGE
+    apic-hybrid-als-7459c5578b-98fnn   2s
+    apic-hybrid-als-7459c5578b-zhjmh   2s
+    apic-hybrid-csa-787c48c7c4-5gqsk   2s
+    apic-hybrid-list-598f8f9b4b-zvp4r  2s
+    apic-hybrid-sda-64946c45b9-kw5m2   2s
+
+    ==> v1/Service
+    NAME              AGE
+    apic-hybrid-als   2s
+    apic-hybrid-csa   2s
+    apic-hybrid-list  2s
+
+    ==> v1/ServiceAccount
+    NAME             AGE
+    apic-hybrid-als  3s
+    apic-hybrid-csa  3s
+    apic-hybrid-sda  3s
+
+    ==> v1alpha3/EnvoyFilter
+    NAME                                 AGE
+    patch-gateway-and-sidecars-with-als  2s
+    patch-gateway-and-sidecars-with-lua  2s
+    patch-gateway-route-config           2s
+    patch-inbound-route-config           2s
+    patch-outbound-route-config          2s
+
+    ==> v1beta1/ClusterRole
+    NAME             AGE
+    apic-hybrid-csa  3s
+    apic-hybrid-sda  3s
+
+    ==> v1beta1/ClusterRoleBinding
+    NAME             AGE
+    apic-hybrid-csa  2s
+    apic-hybrid-sda  3s
+
+    ==> v1beta1/CustomResourceDefinition
+    NAME                  AGE
+    syncpoints.axway.com  3s
+
+    ==> v1beta2/Deployment
+    NAME              AGE
+    apic-hybrid-csa   2s
+    apic-hybrid-list  2s
+    apic-hybrid-sda   2s
+
     ```
 
     {{< alert title="Note" color="primary" >}}The `observer.enabled` and `observer.filebeat.sslVerification` options are required to enable collection of API usage and API traffic metrics  from your environment. {{< /alert >}}
