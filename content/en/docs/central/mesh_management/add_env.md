@@ -298,8 +298,6 @@ After you have created the key pairs and secrets, deploy the Axway proprietary s
     STATUS: DEPLOYED
     ```
 
-    {{< alert title="Note" color="primary" >}}The `observer.enabled` and `observer.filebeat.sslVerification` options are required to enable collection of API usage and API traffic metrics  from your environment. {{< /alert >}}
-
 6. Verify that the mesh agents are deployed in the `apic-control` namespace:
 
     ```
