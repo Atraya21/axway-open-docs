@@ -290,9 +290,9 @@ After you have created the key pairs and secrets, deploy the Axway proprietary s
     Example:
 
     ```
-    helm upgrade --install --namespace apic-control apic-hybrid axway/apicentral-hybrid -f ./hybridOverride.yaml --set als.enabled=true 
-    
-   Release "apic-hybrid" does not exist. Installing it now.
+    helm upgrade --install --namespace apic-control apic-hybrid axway/apicentral-hybrid -f ./hybridOverride.yaml --set als.enabled=true
+
+    Release "apic-hybrid" does not exist. Installing it now.
     NAME:   apic-hybrid
     LAST DEPLOYED: Wed Aug  5 20:25:53 2020
     NAMESPACE: apic-control
