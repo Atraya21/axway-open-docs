@@ -31,15 +31,15 @@ The ALS agent has two modes namely default and verbose. The default mode capture
 
 ## Setup 
 
-The ALS Traceability agent logs and publishes traffic within the Mesh. In order to generate traffic, we need to create certain custom resource definitions (crds) in our mesh. 
+The ALS Traceability agent logs and publishes traffic within the Mesh. In order to generate traffic, we need to create certain custom resource definitions (CRDs) in our mesh. 
 
 **Gateway**:
 
-First, we will create a Gateway in the namespace in which we installed our Mesh agents. Please note if you already have a Gateway crd, you can skip this step and specify that Gateway in the Virtual Service. 
+First, we will create a Gateway in the namespace in which we installed our Mesh agents. Please note if you already have a Gateway CRD, you can skip this step and specify that Gateway in the Virtual Service. 
 
 In the example below we spcify the selector as the "istio-apic-ingress" i.e., the ingress gateway that is installed during the istio installation step in [Deploy your agents with the Amplify CLI](/docs/central/mesh_management/deploy-your-agents-with-the-amplify-cli). If you have a separate ingress gateway that you would like to use, change the spec.selector.istio field to that ingress gateway instead. 
 
-**Note** For more information about Gateways crd please refer to [Istio documentation] (https://istio.io/latest/docs/reference/config/networking/gateway/).
+**Note** For more information about Gateways crd please refer to [Istio documentation](https://istio.io/latest/docs/reference/config/networking/gateway/).
 
 ```yaml
 apiVersion: networking.istio.io/v1alpha3
@@ -329,7 +329,7 @@ spec:
                         stat_prefix: apic-hybrid-als
  ```
  
- To exclude any headers, remove them from "additional_request_headers_to_log" and "additional_response_headers_to_log". Please note unless otherwise specified <<envoyFilterNamespace>> is "istio-system". Once the configuration is changed, run the following command:
+ To exclude any headers, remove them from "additional_request_headers_to_log" and "additional_response_headers_to_log". Please note unless otherwise specified envoyFilterNamespace is "istio-system". Once the configuration is changed, run the following command:
  
   ```bash
  kubectl apply -f <fileName>.yaml
