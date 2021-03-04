@@ -24,7 +24,7 @@ For more information, see [Install Amplify Central CLI](/docs/central/cli_centra
 
 ## Overview
 
-The ALS Traceability Agent gets installed into your Kubernetes cluster as part of deploying the `apicentral-hybrid` helm chart. The agent logs and publishes transactions within the mesh. 
+The ALS Traceability Agent gets installed into your Kubernetes cluster as part of deploying the `apicentral-hybrid` helm chart. The traceability agent (TA) sends metrics and logs for API activity back to AMPLIFY Central so that you can monitor service activity and troubleshoot your services. 
 The agent publishes a summary of the transaction which can be seen in the API Observer. Once the transaction summary is expanded, we can see all the hops within a transactions including the request and response headers.
 
 The ALS agent has two modes namely default and verbose. The default mode captures only the headers specified in the EnvoyFilter and the verbose mode captures all the headers in request and response flows. 
@@ -39,7 +39,7 @@ First, we will create a Gateway in the namespace in which we installed our Mesh 
 
 In the example below we spcify the selector as the "istio-apic-ingress" i.e., the ingress gateway that is installed during the istio installation step in [Deploy your agents with the Amplify CLI](/docs/central/mesh_management/deploy-your-agents-with-the-amplify-cli). If you have a separate ingress gateway that you would like to use, change the spec.selector.istio field to that ingress gateway instead. 
 
-**Note** For more information about Gateways crd please refer to Istio documentation https://istio.io/latest/docs/reference/config/networking/gateway/
+**Note** For more information about Gateways crd please refer to [Istio documentation] (https://istio.io/latest/docs/reference/config/networking/gateway/).
 
 ```yaml
 apiVersion: networking.istio.io/v1alpha3
@@ -232,7 +232,7 @@ The set up is complete for observability in the mesh. In order to verify view tr
 ```bash
 curl -v http://demo.sandbox.axwaytest.net:8080/mylist/list
  ```
- 
+ ![AMPLIFY Central control plane](/Images/central/Transactions.png)
  
 
 ## Toggling the traceability agent
