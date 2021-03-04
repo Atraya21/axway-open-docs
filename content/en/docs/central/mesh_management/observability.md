@@ -31,9 +31,15 @@ The ALS agent has two modes namely default and verbose. The default mode capture
 
 ## Setup 
 
-The ALS Traceability agent logs and publishes traffic within the Mesh. In order to generate traffic, we need to create certain resources in our mesh. 
+The ALS Traceability agent logs and publishes traffic within the Mesh. In order to generate traffic, we need to create certain custom resource definitions (crds) in our mesh. 
 
-First, we will create a Gateway in the namespace in which we installed our Mesh agents. Please note if you already have a Gateway resource, you can skip this step and specify that Gateway in the Virtual Service.  
+**Gateway**:
+
+First, we will create a Gateway in the namespace in which we installed our Mesh agents. Please note if you already have a Gateway crd, you can skip this step and specify that Gateway in the Virtual Service. 
+
+In the example below we spcify the selector as the "istio-apic-ingress" i.e., the ingress gateway that is installed during the istio installation step in [Deploy your agents with the Amplify CLI](/docs/central/mesh_management/deploy-your-agents-with-the-amplify-cli). If you have a separate ingress gateway that you would like to use, change the spec.selector.istio field to that ingress gateway instead. 
+
+**Note** For more information about Gateways crd please refer to [Istio's documentation on Gateway] https://istio.io/latest/docs/reference/config/networking/gateway/
 
 ```yaml
 apiVersion: networking.istio.io/v1alpha3
@@ -58,6 +64,7 @@ Once configured, create the resource using the command:
  ```bash
  kubectl apply -f <fileName>.yaml
  ```
+**Virtual Service**:
 
 Next, we will create the Virtual Service for our services within the mesh. 
 
@@ -94,12 +101,17 @@ Once configured, create the resource using the command:
  kubectl apply -f <fileName>.yaml
  ```
 
+**Pre-existing Virtual Service**:
+
 If you have a Virtual Service resource already, simply add the name for the http route so that the API Service and the transactions can be linked in API Central:
 
 ```yaml
   http:
   - name: list 
 ```
+**Note** The name specified under http.name field should be the same as the API service name
+
+**Service Entry**:
 
 If you have an egress hop within the service, then we need to create a service entry. See the example below:
 
