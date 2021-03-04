@@ -39,7 +39,7 @@ First, we will create a Gateway in the namespace in which we installed our Mesh 
 
 In the example below we spcify the selector as the "istio-apic-ingress" i.e., the ingress gateway that is installed during the istio installation step in [Deploy your agents with the Amplify CLI](/docs/central/mesh_management/deploy-your-agents-with-the-amplify-cli). If you have a separate ingress gateway that you would like to use, change the spec.selector.istio field to that ingress gateway instead. 
 
-**Note** For more information about Gateways crd please refer to [Istio's documentation on Gateway] https://istio.io/latest/docs/reference/config/networking/gateway/
+**Note** For more information about Gateways crd please refer to [Istio's documentation on Gateway] (https://istio.io/latest/docs/reference/config/networking/gateway/)
 
 ```yaml
 apiVersion: networking.istio.io/v1alpha3
@@ -129,6 +129,96 @@ spec:
     number: 80
     protocol: HTTP
   resolution: DNS
+```
+
+**API Central Resources**:
+
+In order to link the transactions with the API Services in API central, certain resources need to be created with the "externalAPIID" specified in the attributes. 
+
+**Note** This step is NOT required to just view transactions in API Observer. The step is only required in the case of linking those transactions to a specific API Service
+
+```yaml
+kind: APIService
+name: <<serviceName>>
+metadata:
+  scope:
+    kind: Environment
+    name: <<environmentName>>
+attributes:
+  externalAPIID: <<clustername-http.name>> # http.name from VS
+spec: {}  
+---
+kind: APIServiceRevision
+name: <<revisionName>>
+metadata:
+  scope:
+    kind: Environment
+    name: <<environmentName>>
+attributes:
+  externalAPIID: <<clustername-http.name>> # http.name from VS
+spec:
+  apiService: <<serviceName>>
+  definition:
+    type: "oas2"
+    value: <<base64 encoded spec>>
+---
+kind: APIServiceInstance
+name: mylist
+metadata:
+  scope:
+    kind: Environment
+    name:  <<environmentName>>
+spec:
+  apiServiceRevision: <<revisionName>>
+  endpoint:
+    - host: "apicentral.axway.com"
+      port: 8080
+      protocol: http
+      routing:
+        basePath: <<basePath>>
+```
+
+Here in an example for the Hybrid List demo service: 
+
+```yaml
+kind: APIService
+name: mylist
+metadata:
+  scope:
+    kind: Environment
+    name: meshone
+attributes:
+  externalAPIID: clusterone-mylist
+spec: {}  
+---
+kind: APIServiceRevision
+name: list-v1
+metadata:
+  scope:
+    kind: Environment
+    name: meshone
+attributes:
+  externalAPIID: clusterone-mylist
+spec:
+  apiService: mylist
+  definition:
+    type: "oas2"
+    value: eyJzd2FnZ2VyIjoiMi4wIiwiaW5mbyI6eyJ0aXRsZSI6Im15bGlzdCIsImRlc2NyaXB0aW9uIjoiQW4gQVBJIEJ1aWxkZXIgc2VydmljZSIsInZlcnNpb24iOiIxLjAuMCJ9LCJob3N0IjoiMTAwLjk5LjIyMi4xMDI6ODA4MCIsImJhc2VQYXRoIjoiL2FwaSIsInBhdGhzIjp7Ii9saXN0Ijp7ImdldCI6eyJyZXNwb25zZXMiOnsiMjAwIjp7ImRlc2NyaXB0aW9uIjoiT0siLCJzY2hlbWEiOnsidHlwZSI6ImFycmF5IiwiaXRlbXMiOnsiJHJlZiI6IiMvZGVmaW5pdGlvbnMvbGlzdCJ9fX19fSwicG9zdCI6eyJyZXNwb25zZXMiOnsiMjAwIjp7ImRlc2NyaXB0aW9uIjoiT0siLCJzY2hlbWEiOnsidHlwZSI6Im9iamVjdCIsInByb3BlcnRpZXMiOnt9fX19LCJwYXJhbWV0ZXJzIjpbeyJpbiI6ImJvZHkiLCJuYW1lIjoiYm9keSIsInNjaGVtYSI6eyIkcmVmIjoiIy9kZWZpbml0aW9ucy9saXN0In19XX19LCIvbGlzdC97aWR9Ijp7ImdldCI6eyJyZXNwb25zZXMiOnsiMjAwIjp7ImRlc2NyaXB0aW9uIjoiT0siLCJzY2hlbWEiOnsiJHJlZiI6IiMvZGVmaW5pdGlvbnMvbGlzdCJ9fX0sInBhcmFtZXRlcnMiOlt7ImluIjoicGF0aCIsIm5hbWUiOiJpZCIsInR5cGUiOiJzdHJpbmciLCJyZXF1aXJlZCI6dHJ1ZX1dfSwicGFyYW1ldGVycyI6W3sibmFtZSI6ImlkIiwiaW4iOiJwYXRoIiwidHlwZSI6InN0cmluZyIsInJlcXVpcmVkIjp0cnVlfV0sImRlbGV0ZSI6eyJyZXNwb25zZXMiOnsiMjAwIjp7ImRlc2NyaXB0aW9uIjoiT0siLCJzY2hlbWEiOnsidHlwZSI6Im9iamVjdCIsInByb3BlcnRpZXMiOnt9fX19LCJwYXJhbWV0ZXJzIjpbeyJpbiI6InBhdGgiLCJuYW1lIjoiaWQiLCJ0eXBlIjoic3RyaW5nIiwicmVxdWlyZWQiOnRydWV9XX19fSwiZGVmaW5pdGlvbnMiOnsibGlzdCI6eyJ0eXBlIjoib2JqZWN0IiwidGl0bGUiOiJsaXN0IiwicHJvcGVydGllcyI6eyJuYW1lIjp7InR5cGUiOiJzdHJpbmcifSwicHJpY2UiOnsidHlwZSI6InN0cmluZyJ9LCJzdG9yZSI6eyJ0eXBlIjoic3RyaW5nIn19fSwiUmVzcG9uc2VNb2RlbCI6eyJ0eXBlIjoib2JqZWN0IiwicmVxdWlyZWQiOlsic3VjY2VzcyIsInJlcXVlc3QtaWQiXSwiYWRkaXRpb25hbFByb3BlcnRpZXMiOmZhbHNlLCJwcm9wZXJ0aWVzIjp7ImNvZGUiOnsidHlwZSI6ImludGVnZXIiLCJmb3JtYXQiOiJpbnQzMiJ9LCJzdWNjZXNzIjp7InR5cGUiOiJib29sZWFuIiwiZGVmYXVsdCI6ZmFsc2V9LCJyZXF1ZXN0LWlkIjp7InR5cGUiOiJzdHJpbmcifSwibWVzc2FnZSI6eyJ0eXBlIjoic3RyaW5nIn0sInVybCI6eyJ0eXBlIjoic3RyaW5nIn19fSwiRXJyb3JNb2RlbCI6eyJ0eXBlIjoib2JqZWN0IiwicmVxdWlyZWQiOlsibWVzc2FnZSIsImNvZGUiLCJzdWNjZXNzIiwicmVxdWVzdC1pZCJdLCJwcm9wZXJ0aWVzIjp7ImNvZGUiOnsidHlwZSI6ImludGVnZXIiLCJmb3JtYXQiOiJpbnQzMiJ9LCJzdWNjZXNzIjp7InR5cGUiOiJib29sZWFuIiwiZGVmYXVsdCI6ZmFsc2V9LCJyZXF1ZXN0LWlkIjp7InR5cGUiOiJzdHJpbmcifX19fX0=
+---
+kind: APIServiceInstance
+name: mylist
+metadata:
+  scope:
+    kind: Environment
+    name: mesh
+spec:
+  apiServiceRevision: list-v1
+  endpoint:
+    - host: "apicentral.axway.com"
+      port: 8080
+      protocol: http
+      routing:
+        basePath: "/mylist"
 ```
 
 ## Toggling the traceability agent
