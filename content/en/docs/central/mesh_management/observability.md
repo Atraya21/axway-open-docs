@@ -39,7 +39,7 @@ First, we will create a Gateway in the namespace in which we installed our Mesh 
 
 In the example below we spcify the selector as the "istio-apic-ingress" i.e., the ingress gateway that is installed during the istio installation step in [Deploy your agents with the Amplify CLI](/docs/central/mesh_management/deploy-your-agents-with-the-amplify-cli). If you have a separate ingress gateway that you would like to use, change the spec.selector.istio field to that ingress gateway instead. 
 
-**Note** For more information about Gateways crd please refer to [Istio's documentation on Gateway] (https://istio.io/latest/docs/reference/config/networking/gateway/)
+**Note** For more information about Gateways crd please refer to Istio documentation https://istio.io/latest/docs/reference/config/networking/gateway/
 
 ```yaml
 apiVersion: networking.istio.io/v1alpha3
@@ -163,7 +163,7 @@ spec:
     value: <<base64 encoded spec>>
 ---
 kind: APIServiceInstance
-name: mylist
+name: <<serviceName>>
 metadata:
   scope:
     kind: Environment
@@ -221,6 +221,20 @@ spec:
         basePath: "/mylist"
 ```
 
+Once configured, please use the following command to populate the resources in API Central:
+
+ ```bash
+amplify central apply -f <fileName>.yaml 
+ ```
+
+The set up is complete for observability in the mesh. In order to verify view transactions in API Observer, generate some traffic for the service:
+
+```bash
+curl -v http://demo.sandbox.axwaytest.net:8080/mylist/list
+ ```
+ 
+ 
+
 ## Toggling the traceability agent
 
 After deploying the `apicentral-hybrid` helm chart to your Kubernetes cluster, you can see ALS Traceability agent running. The service is called `apic-hybrid-als`. During the step [Deploy your agents with the Amplify CLI](/docs/central/mesh_management/deploy-your-agents-with-the-amplify-cli), we were able to select which the mode for the ALS agent. If you want to switch the mode please follow the procedure below. 
@@ -250,7 +264,7 @@ helm repo update
 helm upgrade --install --namespace apic-control apic-hybrid axway/apicentral-hybrid -f hybrid-override.yaml --set als.mode="verbose"
  ```
  
- **From verbose to default **:
+ **From verbose to default**:
  
  Edit the Istio-override.yaml file's configuration under the meshConfig section to set enableEnvoyAccessLogService as false as shown below
  
