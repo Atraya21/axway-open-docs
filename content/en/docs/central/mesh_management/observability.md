@@ -5,11 +5,11 @@ weight: 160
 date: 2021-03-03
 description: Observe transactions in mesh.
 ---
-{{< alert title="Public beta" color="warning" >}}This is a preview of new ALS Traceability Agent, which run separately from the current mesh governance agents and provide full governance of your hybrid environment. The new agent is deployed and configured from the Axway CLI, and it allows for observability in the mesh environment.{{< /alert >}}
+{{< alert title="Public beta" color="warning" >}}This is a preview of a new istio ALS Traceability Agent, which runs is deplpoyed separately from the current istio POC agents that provide full governance of your hybrid environment. This new agent is deployed and configured from the Axway CLI, and it allows for observability of API traffic in the mesh environment.{{< /alert >}}
 
 ## Before you begin
 
-Before you start, see [Deploy your agents with the Amplify CLI](/docs/central/mesh_management/deploy-your-agents-with-the-amplify-cli) to learn how to use the CLI to install the mesh agents into your Kubernetes cluster.
+Before you start, see [Deploy your agents with the Amplify CLI](/docs/central/mesh_management/deploy-your-agents-with-the-amplify-cli) to learn how to use the CLI to install the istio agents into your Kubernetes cluster.
 
 This page will reference the resources created from the [Deploy your agents with the Amplify CLI](/docs/central/mesh_management/deploy-your-agents-with-the-amplify-cli) procedure.
 
@@ -18,24 +18,24 @@ This page will reference the resources created from the [Deploy your agents with
 These prerequisites are required by the Amplify Central CLI, which you will use to configure the Istio discovery agents.
 
 * Node.js 8 LTS or later
-* Minimum Amplify Central CLI version: 0.10.0
+* Minimum Amplify Central CLI version: 0.13.0
 
 For more information, see [Install Amplify Central CLI](/docs/central/cli_central/cli_install/index.html).
 
 ## Overview
 
-The ALS Traceability Agent gets installed into your Kubernetes cluster as part of deploying the `apicentral-hybrid` helm chart. The traceability agent (TA) sends metrics and logs for API activity back to AMPLIFY Central so that you can monitor service activity and troubleshoot your services. 
-The agent publishes a summary of the transaction which can be seen in the API Observer. Once the transaction summary is expanded, we can see all the hops within a transactions including the request and response headers.
+The ALS Traceability Agent is installed into your Kubernetes cluster as part of deploying the `apicentral-hybrid` helm chart. The Traceability Agent (TA) sends metrics and logs for API activity back to Amplify Central so that you can monitor service activity and troubleshoot your services. 
+The agent publishes a summary of the transaction which can be seen in the API Observer. Once the transaction summary is expanded, you can see all the related spans within a transaction including the request and response headers for each.
 
-The ALS agent has two modes namely default and verbose. The default mode captures only the headers specified in the EnvoyFilter and the verbose mode captures all the headers in request and response flows. 
+The ALS agent has two modes; default and verbose. The default mode captures only the headers specified in the EnvoyFilter and the verbose mode captures all the headers in request and response flows. 
 
 ## Setup 
 
-The ALS Traceability agent logs and publishes traffic within the Mesh. In order to generate traffic, we need to create certain custom resource definitions (CRDs) in our mesh. 
+The ALS Traceability agent logs and publishes traffic within the Mesh. In order to generate traffic, we need to create certain custom resource definitions (CRDs) in the mesh. 
 
 **Gateway**:
 
-First, we will create a Gateway in the namespace in which we installed our Mesh agents. Please note if you already have a Gateway CRD, you can skip this step and specify that Gateway in the Virtual Service. 
+First, we will create a Gateway in the namespace in which we installed our Istio agents. Please note if you already have a Gateway CRD, you can skip this step and specify that Gateway in the Virtual Service. 
 
 In the example below we spcify the selector as the "istio-apic-ingress" i.e., the ingress gateway that is installed during the istio installation step in [Deploy your agents with the Amplify CLI](/docs/central/mesh_management/deploy-your-agents-with-the-amplify-cli). If you have a separate ingress gateway that you would like to use, change the spec.selector.istio field to that ingress gateway instead. 
 
@@ -66,9 +66,9 @@ Once configured, create the resource using the command:
  ```
 **Virtual Service**:
 
-Next, we will create the Virtual Service for our services within the mesh. 
+Next, we will create the Virtual Service for our included demo service within the mesh. The value for the http route name is important and will be used again in upcoming configuration.
 
-The example below applies to the "list" demo service that comes with the Hybrid installation. If you already have a Virtual Service, please see the instruction for pre-existig Virtual Services below:
+The example below applies to the "list" demo service that comes with the istio agent Helm installation. If you already have a Virtual Service, please see the instruction for pre-existing Virtual Services below:
 
 ```yaml
 apiVersion: networking.istio.io/v1alpha3
@@ -103,13 +103,13 @@ Once configured, create the resource using the command:
 
 **Pre-existing Virtual Service**:
 
-If you have a Virtual Service resource already, simply add the name for the http route so that the API Service and the transactions can be linked in API Central:
+If you have a Virtual Service resource already, simply add the name for the http route so that the API Service and the related transactions can be linked in API Central:
 
 ```yaml
   http:
   - name: list 
 ```
-**Note** The name specified under http.name field should be the same as the API service name
+**Note** The name specified under http.name field should be the same as the APIService name
 
 **Service Entry**:
 
@@ -133,7 +133,13 @@ spec:
 
 **API Central Resources**:
 
-In order to link the transactions with the API Services in API central, certain resources need to be created with the "externalAPIID" specified in the attributes. 
+In order to link the transactions with the APIServices in Amplify Central, certain resources need to be created with the attribute "externalAPIID" included in their definition. 
+
+The "externalAPIID" attribute is used to define the correlation between the Kubernetes cluster name and the http route name so that the traffic for this APIService can be displayed. 
+
+The cluster name is the value of the field als.clusterName in the agent override file hybrid-override.yaml generated by the Amplify CLI during istio agent installation to your Kubernetes cluster. 
+
+Next, you will need to create the following resources in Central using the Amplify CLI:
 
 ```yaml
 kind: APIService
@@ -219,13 +225,13 @@ spec:
         basePath: "/mylist"
 ```
 
-Once configured, please use the following command to populate the resources in API Central:
+Once configured, please use the following command to populate the resources in Amplify Central:
 
  ```bash
 amplify central apply -f <fileName>.yaml 
  ```
 
-The set up is complete for observability in the mesh. In order to verify view transactions in API Observer, generate some traffic for the service:
+The set up is complete for observability in the mesh. In order to view transactions in API Observer, generate some traffic for the service:
 
 ```bash
 curl -v http://demo.sandbox.axwaytest.net:8080/mylist/list
@@ -235,7 +241,7 @@ curl -v http://demo.sandbox.axwaytest.net:8080/mylist/list
 
 ## Toggling the traceability agent
 
-After deploying the `apicentral-hybrid` helm chart to your Kubernetes cluster, you can see ALS Traceability agent running. The service is called `apic-hybrid-als`. During the step [Deploy your agents with the Amplify CLI](/docs/central/mesh_management/deploy-your-agents-with-the-amplify-cli), we were able to select which the mode for the ALS agent. If you want to switch the mode please follow the procedure below. 
+After deploying the `apicentral-hybrid` helm chart to your Kubernetes cluster, you can see the ALS Traceability agent running. The service is called `apic-hybrid-als`. During the step [Deploy your agents with the Amplify CLI](/docs/central/mesh_management/deploy-your-agents-with-the-amplify-cli), we were able to select which the mode for the ALS agent. If you want to switch the mode please follow the procedure below. 
 
 **From default to verbose**:
 
@@ -283,7 +289,7 @@ helm repo update
 helm upgrade --install --namespace apic-control apic-hybrid axway/apicentral-hybrid -f hybrid-override.yaml --set als.mode="default"
  ```
  
- Aditionally, in default mode the agent can be confgiured to only capture certain request and response headers. By default, we capture all the headers specified in the EnvoyFilter configuration below. See "additional_request_headers_to_log" and "additional_response_headers_to_log" section. 
+ In default mode the Traceability agent can be configured to only capture certain request and response headers. By default, we capture all the headers specified in the EnvoyFilter configuration below. See "additional_request_headers_to_log" and "additional_response_headers_to_log" section. 
  
  ```yaml
  apiVersion: networking.istio.io/v1alpha3
