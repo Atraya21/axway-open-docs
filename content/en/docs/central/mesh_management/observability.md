@@ -58,7 +58,7 @@ spec:
       number: <<8080>>
       protocol: <<HTTP>>
  ```
- 
+
 Once configured, create the resource using the command:
 
  ```bash
@@ -95,7 +95,7 @@ spec:
         port:
           number: 8080
  ```
- 
+
 Once configured, create the resource using the command:
 
  ```bash
@@ -240,10 +240,10 @@ curl -v http://demo.sandbox.axwaytest.net:8080/mylist/list
  ```
 
  ![AMPLIFY Central control plane](/Images/central/Transactions.png)
- 
+
 ## Toggling the traceability agent
 
-After deploying the `apicentral-hybrid` helm chart to your Kubernetes cluster, you can see the ALS Traceability agent running. The service is called `apic-hybrid-als`. During the step [Deploy your agents with the Amplify CLI](/docs/central/mesh_management/deploy-your-agents-with-the-amplify-cli), we were able to select the mode for the ALS agent. If you want to switch the mode please follow the procedure below. 
+After deploying the `apicentral-hybrid` helm chart to your Kubernetes cluster, you can see the ALS Traceability agent running. The service is called `apic-hybrid-als`. During the step [Deploy your agents with the Amplify CLI](/docs/central/mesh_management/deploy-your-agents-with-the-amplify-cli), we were able to select the mode for the ALS agent. If you want to switch the mode please follow the procedure below.
 
 **From default to verbose**:
 
@@ -257,44 +257,44 @@ spec:
  ```
 
 After the change, please re-install Istio again:
- 
+
  ```bash
  istioctl install --set profile=demo -f istio-override.yaml
  ```
 
 After the Istio re-installation, run the following command to set the ALS agent's mode to "verbose"
- 
+
   ```bash
 helm repo update
 helm upgrade --install --namespace apic-control apic-hybrid axway/apicentral-hybrid -f hybrid-override.yaml --set als.mode="verbose"
  ```
- 
+
  **From verbose to default**:
- 
+
 Edit the Istio-override.yaml file's configuration under the meshConfig section to set enableEnvoyAccessLogService as false as shown below
- 
+
 ```yaml
 spec:
   meshConfig:
     enableTracing: true
     enableEnvoyAccessLogService: false
  ```
- 
+
 After the change, please re-install Istio again:
- 
+
  ```bash
  istioctl install --set profile=demo -f istio-override.yaml
  ```
- 
+
 After the Istio re-installation, run the following command to set the ALS agent's mode to "default"
- 
+
   ```bash
 helm repo update
 helm upgrade --install --namespace apic-control apic-hybrid axway/apicentral-hybrid -f hybrid-override.yaml --set als.mode="default"
  ```
- 
+
 In default mode the Traceability agent can be configured to only capture certain request and response headers. By default, we capture all the headers specified in the EnvoyFilter configuration below. See "additional_request_headers_to_log" and "additional_response_headers_to_log" section.
- 
+
  ```yaml
  apiVersion: networking.istio.io/v1alpha3
 kind: EnvoyFilter
@@ -330,9 +330,9 @@ spec:
                         target_uri: apic-hybrid-als.apic-control.svc.cluster.local:9000
                         stat_prefix: apic-hybrid-als
  ```
- 
+
 To exclude any headers, remove them from "additional_request_headers_to_log" and "additional_response_headers_to_log". Please note unless otherwise specified envoyFilterNamespace is "istio-system". Once the configuration is changed, run the following command:
- 
+
   ```bash
  kubectl apply -f <fileName>.yaml
  ```
