@@ -68,7 +68,7 @@ Once configured, create the resource using the command:
 
 Next, we will create the Virtual Service for our services within the mesh. 
 
-The example below applies to the "list" demo service that comes with the Hybrid installation. If you already have a Virtual Service, please skip this step and continue
+The example below applies to the "list" demo service that comes with the Hybrid installation. If you already have a Virtual Service, please see the instruction for pre-existig Virtual Services below:
 
 ```yaml
 apiVersion: networking.istio.io/v1alpha3
@@ -134,8 +134,6 @@ spec:
 **API Central Resources**:
 
 In order to link the transactions with the API Services in API central, certain resources need to be created with the "externalAPIID" specified in the attributes. 
-
-**Note** This step is NOT required to just view transactions in API Observer. The step is only required in the case of linking those transactions to a specific API Service
 
 ```yaml
 kind: APIService
@@ -241,15 +239,12 @@ After deploying the `apicentral-hybrid` helm chart to your Kubernetes cluster, y
 
 **From default to verbose**:
 
-Edit the Istio-override.yaml file's configuration under the meshConfig section to include 
+Edit the Istio-override.yaml file's configuration under the meshConfig section to set enableEnvoyAccessLogService as true as shown below
 ```yaml
 spec:
   meshConfig:
     enableTracing: true
     enableEnvoyAccessLogService: true
-    defaultConfig:
-      envoyAccessLogService:
-        address: apic-hybrid-als.apic-control.svc.cluster.local:9000
  ```
 
 After the change, please re-install Istio again:
@@ -273,9 +268,6 @@ spec:
   meshConfig:
     enableTracing: true
     enableEnvoyAccessLogService: false
-    defaultConfig:
-      envoyAccessLogService:
-        address: apic-hybrid-als.apic-control.svc.cluster.local:9000
  ```
  
  After the change, please re-install Istio again:
