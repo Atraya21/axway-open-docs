@@ -332,3 +332,6 @@ helm upgrade --install --namespace apic-control apic-hybrid axway/apicentral-hyb
 ## Where to go next
 
 For more information on the details of the resources and how the discovery process works, see [Discover APIs and services](/docs/central/mesh_management/discover-apis-and-services).
+
+
+For more information on the details on how the observability & monitoring in mesh works, see [Observability](/docs/central/mesh_management/observability).
