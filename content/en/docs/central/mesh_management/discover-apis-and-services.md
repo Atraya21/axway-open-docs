@@ -5,7 +5,7 @@ weight: 30
 date: 2020-11-19
 description: Learn how to configure the Axway Istio agents to discover your APIs and services.
 ---
-{{< alert title="Early Preview" color="warning" >}}This is a preview of new Istio discovery agents, which are deployed separately from the Istio POC agents that provide full governance of your hybrid environment. The new agents are deployed and configured from the Axway CLI, and they are used to provide visibility to Amplify Central of the Kubernetes resource discovery process.{{< /alert >}}
+{{< alert title="Early Preview" color="warning" >}}This is a preview of new Istio discovery agents, which are deployed separately from the Istio POC agents that provide full governance of your hybrid environment. The new agents are deployed and configured from the Axway CLI, and they monitor Kubernetes resource discovery.{{< /alert >}}
 
 ## Before you begin
 
