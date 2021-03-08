@@ -37,9 +37,9 @@ The ALS Traceability agent logs and publishes traffic within the Mesh. In order 
 
 First, we will create a Gateway in the namespace in which we installed our Istio agents. Please note if you already have a Gateway CRD, you can skip this step and specify that Gateway in the Virtual Service. 
 
-In the example below we spcify the selector as the "istio-apic-ingress" i.e., the ingress gateway that is installed during the istio installation step in [Deploy your agents with the Amplify CLI](/docs/central/mesh_management/deploy-your-agents-with-the-amplify-cli). If you have a separate ingress gateway that you would like to use, change the spec.selector.istio field to that ingress gateway instead. 
+In the example below we specify the selector as the "istio-apic-ingress" i.e., the ingress gateway that is installed during the istio installation step in [Deploy your agents with the Amplify CLI](/docs/central/mesh_management/deploy-your-agents-with-the-amplify-cli). If you have a separate ingress gateway that you would like to use, change the spec.selector.istio field to the label of that ingress gateway instead.
 
-**Note** For more information about Gateways crd please refer to [Istio documentation](https://istio.io/latest/docs/reference/config/networking/gateway/).
+**Note** For more information about Gateway CRD please refer to [Istio documentation](https://istio.io/latest/docs/reference/config/networking/gateway/).
 
 ```yaml
 apiVersion: networking.istio.io/v1alpha3
@@ -68,7 +68,7 @@ Once configured, create the resource using the command:
 
 Next, we will create the Virtual Service for our included demo service within the mesh. The value for the http route name is important and will be used again in upcoming configuration.
 
-The example below applies to the "list" demo service that comes with the istio agent Helm installation. If you already have a Virtual Service, please see the instruction for pre-existing Virtual Services below:
+The example below applies to the "list" demo service that comes with the Istio agent Helm installation. If you already have a Virtual Service, please see the **Pre-existing Virtual Services** section below:
 
 ```yaml
 apiVersion: networking.istio.io/v1alpha3
@@ -103,7 +103,7 @@ Once configured, create the resource using the command:
 
 **Pre-existing Virtual Service**:
 
-If you have a Virtual Service resource already, simply add the name for the http route so that the API Service and the related transactions can be linked in API Central:
+If you have a Virtual Service resource already, simply add a name for/rename the http route so that the API Service and the related transactions can be linked in API Central:
 
 ```yaml
   http:
@@ -113,7 +113,7 @@ If you have a Virtual Service resource already, simply add the name for the http
 
 **Service Entry**:
 
-If you have an egress hop within the service, then we need to create a service entry. See the example below:
+If you have an egress hop from a service in the mesh, then we need to create a service entry. See the example below:
 
 ```yaml
 apiVersion: networking.istio.io/v1beta1
@@ -171,7 +171,7 @@ name: <<serviceName>>
 metadata:
   scope:
     kind: Environment
-    name:  <<environmentName>>
+    name: <<environmentName>>
 spec:
   apiServiceRevision: <<revisionName>>
   endpoint:
@@ -241,7 +241,7 @@ curl -v http://demo.sandbox.axwaytest.net:8080/mylist/list
 
 ## Toggling the traceability agent
 
-After deploying the `apicentral-hybrid` helm chart to your Kubernetes cluster, you can see the ALS Traceability agent running. The service is called `apic-hybrid-als`. During the step [Deploy your agents with the Amplify CLI](/docs/central/mesh_management/deploy-your-agents-with-the-amplify-cli), we were able to select which the mode for the ALS agent. If you want to switch the mode please follow the procedure below. 
+After deploying the `apicentral-hybrid` helm chart to your Kubernetes cluster, you can see the ALS Traceability agent running. The service is called `apic-hybrid-als`. During the step [Deploy your agents with the Amplify CLI](/docs/central/mesh_management/deploy-your-agents-with-the-amplify-cli), we were able to select the mode for the ALS agent. If you want to switch the mode please follow the procedure below. 
 
 **From default to verbose**:
 
