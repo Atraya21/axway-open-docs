@@ -137,9 +137,9 @@ If you choose to deploy Traceability agent. Select the mode in which you want th
 The ALS agent has two modes namely default and verbose. The default mode captures only the headers specified in the EnvoyFilter and the verbose mode captures all the headers in request and response flows. Once selected, you will be able to switch modes if required. Refer to [Observability- Toggling the Traceability Agent](docs/central/mesh_management/observability.md#toggling-the-traceability-agent) 
 
     ```bash
-    Select Traceability Agent HTTP header publishing mode:  (Use arrow keys)
-    ❯ Default
-      Verbose
+        Select Traceability Agent HTTP header publishing mode:  (Use arrow keys)
+        ❯ Default
+          Verbose
     ```
 
 2. Enter the namespace where you would like to deploy the agents or accept the default option by pressing `enter`. The CLI collects a list of all your existing namespaces and provides an option to deploy to one of those. You can also choose to create a new Kubernetes namespace and deploy there instead.
