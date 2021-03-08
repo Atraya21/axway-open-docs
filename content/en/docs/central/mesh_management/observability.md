@@ -82,7 +82,7 @@ spec:
   gateways:
   - gateway-ingress
   http:
-  - name: list
+  - name: list # this should be the same as the APIService name
     match:
     - uri:
         prefix: /mylist
