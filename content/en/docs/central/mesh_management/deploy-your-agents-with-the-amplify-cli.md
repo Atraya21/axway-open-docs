@@ -5,7 +5,7 @@ weight: 160
 date: 2020-12-0
 description: Use the Amplify CLI to deploy Axway Istio agents.
 ---
-{{< alert title="Public beta" color="warning" >}}This is a preview of new Istio agents, which run separately from the current Istio POC agents that provide full governance of your hybrid environment. The new agents are deployed and configured from the Axway CLI, and they allow for updated visibility to the Kubernetes resource discovery process.{{< /alert >}}
+{{< alert title="Public beta" color="warning" >}}This is a preview of new Istio agents, which run separately from the Istio POC agents that provide full governance of your hybrid environment. The new agents are deployed and configured from the Axway CLI, and they allow for updated visibility to the Kubernetes resource discovery process.{{< /alert >}}
 
 ## Before you begin
 
