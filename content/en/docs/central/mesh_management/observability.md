@@ -5,7 +5,7 @@ weight: 160
 date: 2021-03-03
 description: Observe transactions in mesh.
 ---
-{{< alert title="Public beta" color="warning" >}}This is a preview of a new istio ALS Traceability Agent, which runs is deplpoyed separately from the current istio POC agents that provide full governance of your hybrid environment. This new agent is deployed and configured from the Axway CLI, and it allows for observability of API traffic in the mesh environment.{{< /alert >}}
+{{< alert title="Public beta" color="warning" >}}This is a preview of a new Istio ALS Traceability Agent, which is deployed separately from the current Istio POC agents that provide full governance of your hybrid environment. This new agent is deployed and configured from the Axway CLI, and it allows for observability of API traffic in the mesh environment.{{< /alert >}}
 
 ## Before you begin
 
