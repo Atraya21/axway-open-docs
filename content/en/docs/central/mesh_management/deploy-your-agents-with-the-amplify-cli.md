@@ -13,10 +13,12 @@ Ensure you have the following tools installed:
 
 * Amplify Central CLI 0.10.0 or later
 * Helm 3.2.4 or later
-* Istioctl 1.6.8
-* Kubectl 1.16 or later
+* Istioctl 1.8.2
+* Kubectl 1.18 or later
 * Node.js 10.13.0 or later
 * OpenSSL 2.8.3 or later
+
+**Note:** The Kubernetes version that is currently supported by us is 1.19.8
 
 For more information about installing the CLI, see [Install Amplify Central CLI](/docs/central/cli_central/cli_install/).
 
