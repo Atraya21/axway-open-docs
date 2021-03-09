@@ -52,11 +52,35 @@ spec:
     istio: istio-apic-ingress
   servers:
   - hosts:
-    - <<host>>.hybrid.sandbox.axwaytest.net
+    - <<cluster-name>>.hybrid.sandbox.axwaytest.net
     port:
       name: <<port-HTTP>>
       number: <<8080>>
       protocol: <<HTTP>>
+ ```
+ 
+ For an Https Gateway, please use the following configuration:
+ 
+ ```yaml
+apiVersion: networking.istio.io/v1beta1
+kind: Gateway
+metadata:
+  name: gateway-ingress
+  namespace: <<apic-control>>
+spec:
+  selector:
+    istio: istio-apic-ingress
+  servers:
+  - hosts:
+    - <<cluster-name>>.hybrid.sandbox.axwaytest.net
+    port:
+      name: port-HTTP
+      number: 443
+      protocol: HTTPS
+    tls:
+      mode: SIMPLE 
+      serverCertificate: /etc/istio/istio-ingressgateway/tls.crt
+      privateKey: /etc/istio/istio-ingressgateway/tls.key
  ```
 
 Once configured, create the resource using the command:
