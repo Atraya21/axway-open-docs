@@ -18,7 +18,7 @@ Ensure you have the following tools installed:
 * Node.js 10.13.0 or later
 * OpenSSL 2.8.3 or later
 
-**Note:** The Kubernetes version that is currently supported by us is 1.19.8
+**Note:** The most recently validated Kubernetes version was 1.19.8.
 
 For more information about installing the CLI, see [Install Amplify Central CLI](/docs/central/cli_central/cli_install/).
 
