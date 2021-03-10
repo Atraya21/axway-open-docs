@@ -15,7 +15,7 @@ Ensure you have the following tools installed:
 * Helm 3.2.4 or later
 * Istioctl 1.8.2
 * Kubectl 1.18 or later
-* Node.js 10.13.0 or later
+* Node.js >= 10.13.0 and <= 12.14.1
 * OpenSSL 2.8.3 or later
 
 **Note:** The most recently validated Kubernetes version was 1.19.8.
