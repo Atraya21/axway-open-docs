@@ -11,7 +11,7 @@ description: Use the Amplify CLI to deploy Axway Istio agents.
 
 Ensure you have the following tools installed:
 
-* Amplify Central CLI 0.10.0 or later
+* Amplify Central CLI 0.13.0 or later
 * Helm 3.2.4 or later
 * Istioctl 1.8.2
 * Kubectl 1.18 or later
