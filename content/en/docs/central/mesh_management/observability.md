@@ -58,9 +58,9 @@ spec:
       number: <<8080>>
       protocol: <<HTTP>>
  ```
- 
+
  For an Https Gateway, please use the following configuration:
- 
+
  ```yaml
 apiVersion: networking.istio.io/v1beta1
 kind: Gateway
