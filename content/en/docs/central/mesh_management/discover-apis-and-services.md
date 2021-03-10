@@ -18,7 +18,7 @@ This page will reference the resources created from the [Deploy your agents with
 These prerequisites are required by the Amplify Central CLI, which you will use to configure the Istio discovery agents.
 
 * Node.js 8 LTS or later
-* Minimum Amplify Central CLI version: 0.10.0
+* Minimum Amplify Central CLI version: 0.13.0
 
 For more information, see [Install Amplify Central CLI](/docs/central/cli_central/cli_install/index.html).
 
