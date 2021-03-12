@@ -17,7 +17,7 @@ This page will reference the resources created from the [Deploy your agents with
 
 These prerequisites are required by the Amplify Central CLI, which you will use to configure the Istio discovery agents.
 
-* Node.js 8 LTS or later
+* Node.js 10.13.0 or later
 * Minimum Amplify Central CLI version: 0.13.0
 
 For more information, see [Install Amplify Central CLI](/docs/central/cli_central/cli_install/index.html).
@@ -157,7 +157,7 @@ spec:
   resolution: DNS
 ```
 
-**API Central Resources**:
+**Amplify Central Resources**:
 
 In order to link the transactions with the APIServices in Amplify Central, certain resources need to be created with the attribute "externalAPIID" included in their definition.
 
@@ -362,7 +362,7 @@ To exclude any headers, remove them from "additional_request_headers_to_log" and
  ```
 ## Sanitization of Transactions
 
-The ALS Traceability Agent (which logs and publishes Transactions) can be configured to sanitize the Transaction information that it publishes i.e Request/Response headers, Query Parameters, Path Segments.
+The ALS Traceability Agent can be configured to sanitize the Transaction information that it publishes; i.e Request/Response headers, Query Parameters, Path Segments. Sanitization configuraiton is passed to the Traceability Agent via Helm.
 
 Below is a sample sanitization configuration:
 
@@ -426,15 +426,15 @@ als:
 
 * Under "sanitize" section, the user can specify the keyMatches Regex of the headers to be partially obfuscated. The "valueMatch" is a Regex which specifies the portion that is to be sanitized. For example if only first three characters are to be obfuscated, the "valueMatch" would be "^.{0,3}". The "sanitize" section can be empty i.e "keyMatch & valueMatch" pair is optional. However, both keyMatch and valueMatch have to specified in pairs if non empty.
 
-Please put your configurations in a file and then execute the following command:
+Put your sanitization configuration into a file and then execute the following command:
 ```bash
 helm upgrade --install apic-hybrid axway/apicentral-hybrid --namespace apic-control -f hybrid-override.yaml -f <pathToConfigFile>/config.yaml
 ```
-Please monitor the ALS traceability agent pods have restarted by executing the following command:
+Monitor the ALS Traceability Agent pods have restarted by executing the following command:
 ```bash
 kubectl -n <namespace of ALS agent> get pods
 ```
-The deployment of ALS traceability agent will not be successful if there is an invalid configuration provided. If there is an error in the pods after executing the command above you can check the log by executing the following command 
+The deployment of ALS Traceability Agent will fail if invalid configuration is provided. If there is an error in the pods after executing the command above you can check the log by executing the following command: 
 ```bash
 kubectl -n <namespace of ALS agent> logs <podName>
 ```
