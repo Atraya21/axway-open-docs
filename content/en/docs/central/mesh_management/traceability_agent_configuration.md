@@ -1,6 +1,6 @@
 ---
-title: Observability in Mesh
-linkTitle: Observability in Mesh
+title: Service Mesh Traceability
+linkTitle: Service Mesh Traceability
 weight: 160
 date: 2021-03-03
 description: Observe transactions in mesh.
@@ -265,7 +265,7 @@ curl -v http://demo.sandbox.axwaytest.net:8080/mylist/list
 
  ![AMPLIFY Central control plane](/Images/central/Transactions.png)
 
-## Toggling the traceability agent
+## Toggling the Traceability agent
 
 After deploying the `apicentral-hybrid` helm chart to your Kubernetes cluster, you can see the ALS Traceability agent running. The service is called `apic-hybrid-als`. During the step [Deploy your agents with the Amplify CLI](/docs/central/mesh_management/deploy-your-agents-with-the-amplify-cli), we were able to select the mode for the ALS agent. If you want to switch the mode please follow the procedure below.
 
@@ -293,7 +293,7 @@ helm repo update
 helm upgrade --install --namespace apic-control apic-hybrid axway/apicentral-hybrid -f hybrid-override.yaml --set als.mode="verbose"
  ```
 
- **From verbose to default**:
+**From verbose to default**:
 
 Edit the Istio-override.yaml file's configuration under the meshConfig section to set enableEnvoyAccessLogService as false as shown below
 
@@ -360,3 +360,82 @@ To exclude any headers, remove them from "additional_request_headers_to_log" and
   ```bash
  kubectl apply -f <fileName>.yaml
  ```
+## Sanitization of Transactions
+
+The ALS Traceability Agent (which logs and publishes Transactions) can be configured to sanitize the Transaction information that it publishes i.e Request/Response headers, Query Parameters, Path Segments.
+
+Below is a sample sanitization configuration:
+
+```yaml
+als:
+  sanitization:
+    pathFilters:
+    - keyMatch: "list" #Regex to remove path segment "list"
+    argsFilters:
+      remove:
+        - keyMatch: "id" #Regex to remove query parameter "id" 
+      sanitize:
+        - keyMatch: "city"  #Regex to sanitize first three characters of query param "city"
+          valueMatch: "^.{0,3}"
+    requestHeaderFilters:
+      remove:
+        - keyMatch: "^x-amplify.*" #Regex to remove all x-amplify headers in Reqheaders
+      sanitize:
+        - keyMatch: "x-axway"
+          valueMatch: "list" #Regex (can be specified as a string literal) to sanitize "list" x-axway headers in Reqheaders
+    responseHeaderFilters:
+      remove:
+        - keyMatch: "x-envoy.*" #Regex to remove all x-envoy headers in Resheaders
+      sanitize:
+        - keyMatch: "ip"  #Regex to sanitize ip in ResHeaders as per Regex specified in Valuematch 
+          valueMatch: ".{0,3}$"
+
+# Also Valid Configuration (or to disable all sanitization rules) 
+als:
+  sanitization:
+    pathFilters:
+    argsFilters:
+      remove:
+      sanitize:
+    requestHeaderFilters:
+      remove:
+      sanitize:
+    responseHeaderFilters:
+      remove:
+      sanitize:
+```
+### Description of the yaml configuration:
+ 
+**Path Segments**
+
+* "pathFilters" is used to apply apply redaction to path segments in URI path. The "pathFilters" section is an array of "keyMatch" which is used to specify the path segments to be removed from the URI Path. This keyMatch value is a Regex. "pathFilters" can be empty i.e "keyMatch" is not required. However, keyMatch cannot be empty if specified. 
+
+**Query Parameters**
+
+* "argsFilters" is used to apply redaction to query parameters. "argsFilters" can be empty. 
+
+* Under "remove" section, the user can specify an array of keyMatch Regex to remove query parameters. The "remove" section can be empty i.e "keyMatch" is optional. However, "keyMatch" cannot be empty if specified. 
+
+* Under "sanitize" section, the user can specify the keyMatches Regex of the query parameters to be partially obfuscated. The "valueMatch" is a Regex which specifies the portion that is to be sanitized. For example if only first three characters are to be obfuscated, the "valueMatch" would be "^.{0,3}". The "sanitize" section can be empty i.e "keyMatch & valueMatch" pair is optional. However, both keyMatch and valueMatch have to specified in pairs if non empty.
+
+**Request and Response Headers**
+
+* "requestHeaderFilters" and "responseHeaderFilters" are used to apply redaction to request and response headers respectively.  Both "requestHeaderFilters" and "responseHeaderFilters" can be empty. 
+
+* Under "remove" section, the user can specify an array of keyMatch Regex to remove headers. The "remove" section can be empty i.e "keyMatch" is optional. However, "keyMatch" cannot be empty if specified. 
+
+* Under "sanitize" section, the user can specify the keyMatches Regex of the headers to be partially obfuscated. The "valueMatch" is a Regex which specifies the portion that is to be sanitized. For example if only first three characters are to be obfuscated, the "valueMatch" would be "^.{0,3}". The "sanitize" section can be empty i.e "keyMatch & valueMatch" pair is optional. However, both keyMatch and valueMatch have to specified in pairs if non empty.
+
+Please put your configurations in a file and then execute the following command:
+```bash
+helm upgrade --install apic-hybrid axway/apicentral-hybrid --namespace apic-control -f hybrid-override.yaml -f <pathToConfigFile>/config.yaml
+```
+Please monitor the ALS traceability agent pods have restarted by executing the following command:
+```bash
+kubectl -n <namespace of ALS agent> get pods
+```
+The deployment of ALS traceability agent will not be successful if there is an invalid configuration provided. If there is an error in the pods after executing the command above you can check the log by executing the following command 
+```bash
+kubectl -n <namespace of ALS agent> logs <podName>
+```
+The logs should display the configuration error. Fix the configuration and repeat the steps above. 
