@@ -137,7 +137,7 @@ The following prompts are related to the details about the Axway Istio agents.
     ```
 
 If you choose to deploy Traceability agent. Select the mode in which you want the Traceability agent to run.
-The ALS agent has two modes namely default and verbose. The default mode captures only the headers specified in the EnvoyFilter and the verbose mode captures all the headers in request and response flows. Once selected, you will be able to switch modes if required. Refer to [Observability- Toggling the Traceability Agent](docs/central/mesh_management/observability.md#toggling-the-traceability-agent)
+The ALS agent has two modes namely default and verbose. The default mode captures only the headers specified in the EnvoyFilter and the verbose mode captures all the headers in request and response flows. Once selected, you will be able to switch modes if required. Refer to [Service Mesh Traceability- Toggling the Traceability Agent](docs/central/mesh_management/traceability_agent_configuration.md#toggling-the-traceability-agent)
 
    ```bash
     Select Traceability Agent HTTP header publishing mode:  (Use arrow keys)
@@ -336,4 +336,4 @@ helm upgrade --install --namespace apic-control apic-hybrid axway/apicentral-hyb
 
 For more information on the details of the resources and how the discovery process works, see [Discover APIs and services](/docs/central/mesh_management/discover-apis-and-services).
 
-For more information on the details on how the observability and monitoring in mesh works, see [Observability](/docs/central/mesh_management/observability).
+For more information on the details on how the service mesh traceability works, see [Service Mesh Traceability](docs/central/mesh_management/traceability_agent_configuration.md).
