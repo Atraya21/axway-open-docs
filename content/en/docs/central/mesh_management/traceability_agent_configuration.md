@@ -360,6 +360,7 @@ To exclude any headers, remove them from "additional_request_headers_to_log" and
   ```bash
  kubectl apply -f <fileName>.yaml
  ```
+
 ## Sanitization of Transactions
 
 The ALS Traceability Agent can be configured to sanitize the Transaction information that it publishes; i.e Request/Response headers, Query Parameters, Path Segments. Sanitization configuraiton is passed to the Traceability Agent via Helm.
@@ -404,38 +405,45 @@ als:
       remove:
       sanitize:
 ```
-### Description of the yaml configuration:
+
+### Description of the yaml configuration
  
 **Path Segments**
 
-* "pathFilters" is used to apply apply redaction to path segments in URI path. The "pathFilters" section is an array of "keyMatch" which is used to specify the path segments to be removed from the URI Path. This keyMatch value is a Regex. "pathFilters" can be empty i.e "keyMatch" is not required. However, keyMatch cannot be empty if specified. 
+* "pathFilters" is used to apply apply redaction to path segments in URI path. The "pathFilters" section is an array of "keyMatch" which is used to specify the path segments to be removed from the URI Path. This keyMatch value is a Regex. "pathFilters" can be empty i.e "keyMatch" is not required. However, keyMatch cannot be empty if specified.
 
 **Query Parameters**
 
-* "argsFilters" is used to apply redaction to query parameters. "argsFilters" can be empty. 
+* "argsFilters" is used to apply redaction to query parameters. "argsFilters" can be empty.
 
-* Under "remove" section, the user can specify an array of keyMatch Regex to remove query parameters. The "remove" section can be empty i.e "keyMatch" is optional. However, "keyMatch" cannot be empty if specified. 
+* Under "remove" section, the user can specify an array of keyMatch Regex to remove query parameters. The "remove" section can be empty i.e "keyMatch" is optional. However, "keyMatch" cannot be empty if specified.
 
 * Under "sanitize" section, the user can specify the keyMatches Regex of the query parameters to be partially obfuscated. The "valueMatch" is a Regex which specifies the portion that is to be sanitized. For example if only first three characters are to be obfuscated, the "valueMatch" would be "^.{0,3}". The "sanitize" section can be empty i.e "keyMatch & valueMatch" pair is optional. However, both keyMatch and valueMatch have to specified in pairs if non empty.
 
 **Request and Response Headers**
 
-* "requestHeaderFilters" and "responseHeaderFilters" are used to apply redaction to request and response headers respectively.  Both "requestHeaderFilters" and "responseHeaderFilters" can be empty. 
+* "requestHeaderFilters" and "responseHeaderFilters" are used to apply redaction to request and response headers respectively.  Both "requestHeaderFilters" and "responseHeaderFilters" can be empty.
 
-* Under "remove" section, the user can specify an array of keyMatch Regex to remove headers. The "remove" section can be empty i.e "keyMatch" is optional. However, "keyMatch" cannot be empty if specified. 
+* Under "remove" section, the user can specify an array of keyMatch Regex to remove headers. The "remove" section can be empty i.e "keyMatch" is optional. However, "keyMatch" cannot be empty if specified.
 
 * Under "sanitize" section, the user can specify the keyMatches Regex of the headers to be partially obfuscated. The "valueMatch" is a Regex which specifies the portion that is to be sanitized. For example if only first three characters are to be obfuscated, the "valueMatch" would be "^.{0,3}". The "sanitize" section can be empty i.e "keyMatch & valueMatch" pair is optional. However, both keyMatch and valueMatch have to specified in pairs if non empty.
 
 Put your sanitization configuration into a file and then execute the following command:
+
 ```bash
 helm upgrade --install apic-hybrid axway/apicentral-hybrid --namespace apic-control -f hybrid-override.yaml -f <pathToConfigFile>/config.yaml
 ```
+
 Monitor the ALS Traceability Agent pods have restarted by executing the following command:
+
 ```bash
 kubectl -n <namespace of ALS agent> get pods
 ```
-The deployment of ALS Traceability Agent will fail if invalid configuration is provided. If there is an error in the pods after executing the command above you can check the log by executing the following command: 
+
+The deployment of ALS Traceability Agent will fail if invalid configuration is provided. If there is an error in the pods after executing the command above you can check the log by executing the following command:
+
 ```bash
 kubectl -n <namespace of ALS agent> logs <podName>
 ```
-The logs should display the configuration error. Fix the configuration and repeat the steps above. 
+
+The logs should display the configuration error. Fix the configuration and repeat the steps above.
