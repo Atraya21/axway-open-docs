@@ -215,7 +215,7 @@ After you have created the key pairs and secrets, deploy the Axway proprietary s
 
    `cd e4fd7216693f50360169492633ab0122/`
 
-3.`Istioctl` is required for installing Istio. Istio version 1.8.2 is recommended and is compatible with the Axway mesh agents. If you have not previously added it to your client system, you can download `Istioctl` using the following command:
+3. `Istioctl` is required for installing Istio. Istio version 1.8.2 is recommended and is compatible with the Axway mesh agents. If you have not previously added it to your client system, you can download `Istioctl` using the following command:
 
    `curl -L https://istio.io/downloadIstio | ISTIO_VERSION=1.8.2 TARGET_ARCH=x86_64 sh -`
 
@@ -317,7 +317,7 @@ After you have created the key pairs and secrets, deploy the Axway proprietary s
     `kubectl get services -n apic-control`
 
     The output of this command should list the mesh agent services.
-    
+
 9. Verify that the list demo service is deployed in the `apic-demo` namespace:
 
    `kubectl get services -n apic-demo`
