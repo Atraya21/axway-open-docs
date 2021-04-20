@@ -214,15 +214,15 @@ After you have created the key pairs and secrets, deploy the Axway proprietary s
    ```
    cd e4fd7216693f50360169492633ab0122/
    ```
-3. From Istio 1.6+, `Istioctl` is required for installing Istio. Istio version 1.6.8 is recommended and is compatible with the Axway mesh agents. If you have not previously added it to your client system, you can download `Istioctl` using the following command:
+3.`Istioctl` is required for installing Istio. Istio version 1.8.2 is recommended and is compatible with the Axway mesh agents. If you have not previously added it to your client system, you can download `Istioctl` using the following command:
 
    ```
-   curl -L https://istio.io/downloadIstio | ISTIO_VERSION=1.6.8 TARGET_ARCH=x86_64 sh -
+   curl -L https://istio.io/downloadIstio | ISTIO_VERSION=1.8.2 TARGET_ARCH=x86_64 sh -
    ```
 4. Export the path where you downloaded `Istioctl` to start using it. Note the use of `$PWD` below and change it accordingly.
 
    ```
-   export PATH=$PATH:$PWD/istio-1.6.8/bin
+   export PATH=$PATH:$PWD/istio-1.8.2/bin
    ```
 5. Install Istio using `Istioctl`. This step can take several minutes to complete.
 
