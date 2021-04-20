@@ -12,7 +12,7 @@ description: Use the Axway CLI to deploy Axway Istio agents.
 
 Ensure you have the following tools installed:
 
-* Axway Central CLI 1.2.0 or later
+* Axway Central CLI 1.6.0 or later
 * Helm 3.2.4 or later
 * Istioctl 1.8.2
 * Kubectl 1.18 or later
@@ -298,7 +298,7 @@ After the new environment is created, the CLI creates the following:
 * `istio-override.yaml` and `hybrid-override.yaml` files, and places them in your current directory.
 * `Mesh`, `MeshDiscovery`, `K8SCluster`, `SpecDiscovery`, and two `ResourceDiscoveries` resources are used to discover and promote the kubernetes resources of the demo service to the provided environment.
 
-The demo service is packaged along with the `apicentral-hybrid` helm chart.
+The demo service is packaged along with the `ampc-hybrid` helm chart.
 
 ## Install Istio
 
@@ -321,7 +321,7 @@ After the Istio installation is complete, run the following command to finish th
 
 ```bash
 helm repo update
-helm upgrade --install --namespace apic-control apic-hybrid axway/apicentral-hybrid -f hybrid-override.yaml
+helm upgrade --install --namespace apic-control ampc-hybrid axway/ampc-hybrid -f hybrid-override.yaml
 ```
 
 Note that the discovery agents polls every 10 seconds for the discovery resources by default. To change this, you must pass a helm override in the form of `--set ada.poll.interval` or `--set rda.poll.interval` accordingly with the desired agents.
@@ -329,7 +329,7 @@ Note that the discovery agents polls every 10 seconds for the discovery resource
 For example, if you want the API Discovery agent to poll every 2 seconds for the discovery resources, you must run the following command to install the agents:
 
 ```bash
-helm upgrade --install --namespace apic-control apic-hybrid axway/apicentral-hybrid -f hybrid-override.yaml --set ada.poll.interval=2s
+helm upgrade --install --namespace apic-control ampc-hybrid axway/ampc-hybrid -f hybrid-override.yaml --set ada.poll.interval=2s
 ```
 
 ## Verify that the pods are running
@@ -339,21 +339,21 @@ helm upgrade --install --namespace apic-control apic-hybrid axway/apicentral-hyb
     ```bash
     kgp -n apic-control
     NAME                               READY   STATUS    RESTARTS   AGE
-    apic-hybrid-ada-bc5fcd58-6ghvb     1/1     Running   0          18s
-    apic-hybrid-als-76b499bc7c-d4566   1/1     Running   0          17s
-    apic-hybrid-als-76b499bc7c-rgtqb   1/1     Running   0          17s
-    apic-hybrid-rda-64cfdb558b-7kz2s   1/1     Running   0          17s
+    ampc-hybrid-ada-bc5fcd58-6ghvb     1/1     Running   0          18s
+    ampc-hybrid-als-76b499bc7c-d4566   1/1     Running   0          17s
+    ampc-hybrid-als-76b499bc7c-rgtqb   1/1     Running   0          17s
+    ampc-hybrid-rda-64cfdb558b-7kz2s   1/1     Running   0          17s
     ```
 
-2. The `apicentral-hybrid` helm installation creates a namespace named `apic-demo` and deploys a service called `apic-hybrid-list`. Run the following command to verify this demo service is running.
+2. The `ampc-hybrid` helm installation creates a namespace named `apic-demo` and deploys a service called `ampc-hybrid-list`. Run the following command to verify this demo service is running.
 
     ```bash
     kgp -n apic-demo
     NAME                                READY   STATUS    RESTARTS   AGE
-    apic-hybrid-list-598f8f9b4b-9wsc6   2/2     Running   0          90s
+    ampc-hybrid-list-598f8f9b4b-9wsc6   2/2     Running   0          90s
     ```
 
-3. The installation creates resources, which provide configuration to the API Discovery Agent and the Resource Discovery Agent. You can use the Axway CLI to verify the agents are configured and running, and to list the resources that are expect to exist as a result of the agents discovering the `apic-hybrid-list` service.
+3. The installation creates resources, which provide configuration to the API Discovery Agent and the Resource Discovery Agent. You can use the Axway CLI to verify the agents are configured and running, and to list the resources that are expect to exist as a result of the agents discovering the `ampc-hybrid-list` service.
 
     ```bash
     axway central get apispecs -s mesh-demo
@@ -370,8 +370,8 @@ helm upgrade --install --namespace apic-control apic-hybrid axway/apicentral-hyb
     ✔ Resource(s) has successfully been retrieved
 
     NAME                                             AGE            TITLE                      SCOPE KIND  SCOPE NAME
-    service.apic-demo.apic-hybrid-list               6 minutes ago  service-cli-1605812140608  K8SCluster  mesh-demo
-    pod.apic-demo.apic-hybrid-list-598f8f9b4b-9wsc6  6 minutes ago  pod-cli-1605812140608      K8SCluster  mesh-demo
+    service.apic-demo.ampc-hybrid-list               6 minutes ago  service-cli-1605812140608  K8SCluster  mesh-demo
+    pod.apic-demo.ampc-hybrid-list-598f8f9b4b-9wsc6  6 minutes ago  pod-cli-1605812140608      K8SCluster  mesh-demo
     ```
 
     If you see two resources after running this command, that confirms that the Resource Discovery Agent is working.
