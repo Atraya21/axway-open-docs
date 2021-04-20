@@ -24,7 +24,7 @@ For more information, see [Install Axway Central CLI](/docs/central/cli_central/
 
 ## Overview
 
-Discovery agents are services that get installed into your Kubernetes cluster as part of deploying the `apicentral-hybrid` helm chart.
+Discovery agents are services that get installed into your Kubernetes cluster as part of deploying the `ampc-hybrid` helm chart.
 
 The API Discovery Agent (ADA) uses a resource called `SpecDiscovery` to find Swagger documentation exposed over an HTTP endpoint. The `SpecDiscovery` provides configuration details to the ADA to instruct it where to find documentation inside of a cluster.
 
@@ -38,7 +38,7 @@ For more information about the discovery agents, see [Amplify Central resources 
 
 ## Start the discovery agents
 
-After deploying the `apicentral-hybrid` helm chart to your Kubernetes cluster, you can see two discovery agents running. The services are called `apic-hybrid-ada` and `apic-hybrid-rda`. These two agents are responsible for discovering pods, services, and documentation inside of your Kubernetes cluster. After they discover a service, they report back to Amplify Central where the service will be represented as an API service in your environment.
+After deploying the `ampc-hybrid` helm chart to your Kubernetes cluster, you can see two discovery agents running. The services are called `ampc-hybrid-ada` and `ampc-hybrid-rda`. These two agents are responsible for discovering pods, services, and documentation inside of your Kubernetes cluster. After they discover a service, they report back to Amplify Central where the service will be represented as an API service in your environment.
 
 ## How the discovery agents report events to Amplify Central
 
@@ -165,16 +165,16 @@ If you do not have the ADA and RDA configured, or if you would like the agents t
     ✔ "k8scluster/k8s-mesh" has successfully been created.
      ```
 
-7. After the K8SCluster is created, you must update the `apic-hybrid-ada` and `apic-hybrid-rda` pods to connect to the new K8SCluster. Run the following commands to update each pod with the new environment variable:
+7. After the K8SCluster is created, you must update the `ampc-hybrid-ada` and `ampc-hybrid-rda` pods to connect to the new K8SCluster. Run the following commands to update each pod with the new environment variable:
 
     ```bash
-    ~ » kubectl set env deployment/apic-hybrid-ada CLUSTERNAME=<YOUR-K8SCLUSTER-NAME> -n apic-control
-    deployment.extensions/apic-hybrid-ada env updated
+    ~ » kubectl set env deployment/ampc-hybrid-ada CLUSTERNAME=<YOUR-K8SCLUSTER-NAME> -n apic-control
+    deployment.extensions/ampc-hybrid-ada env updated
     ```
 
     ```bash
-    ~ » kubectl set env deployment/apic-hybrid-rda CLUSTERNAME=<YOUR-K8SCLUSTER-NAME> -n apic-control
-    deployment.extensions/apic-hybrid-ada env updated
+    ~ » kubectl set env deployment/ampc-hybrid-rda CLUSTERNAME=<YOUR-K8SCLUSTER-NAME> -n apic-control
+    deployment.extensions/ampc-hybrid-ada env updated
     ```
 
 ## Deploy the Sunset app
@@ -295,7 +295,7 @@ To create a `SpecDiscovery`, follow these steps:
 2. Update the `metadata.scope.name` field to reflect the same name given to the K8SCluster. This links the `SpecDiscovery` to the K8SCluster. To verify the K8SCluster name that is being used for the ADA, run:
 
    ```bash
-   ~ » kubectl set env deployment/apic-hybrid-ada --list -n apic-control | grep CLUSTERNAME
+   ~ » kubectl set env deployment/ampc-hybrid-ada --list -n apic-control | grep CLUSTERNAME
    CLUSTERNAME=k8s-mesh
    ```
 
@@ -334,8 +334,8 @@ Follow these steps to discover the pod:
    ```bash
    ~ » kubectl get pods -n apic-control
    NAME                               READY   STATUS    RESTARTS   AGE
-   apic-hybrid-ada-6cdc497bdf-r2zht   1/1     Running   0          50m
-   apic-hybrid-rda-69ddfbd88c-9pws2   1/1     Running   0          50m
+   ampc-hybrid-ada-6cdc497bdf-r2zht   1/1     Running   0          50m
+   ampc-hybrid-rda-69ddfbd88c-9pws2   1/1     Running   0          50m
    ```
 3. In order to match the `sunset` pod, you must add a label to the pod so that it can be picked up by the discovery agent. This label also needs to be defined in the `spec.resourceFilter.matchLabels` field of the `SpecDiscovery` in order for the agent to find it. The label can be anything you want. In this example, we will add `discover=true` to the pod labels as follows:
 
@@ -383,7 +383,7 @@ Follow these steps to discover the pod:
    sunset-discovery     18 minutes ago  apic-demo-discovery  K8SCluster  k8s-mesh
    cli-1605551801337    2 hours ago     cli-1605551801337    K8SCluster  k8s-mesh
    ```
-7. The `apic-hybrid-ada` pod will see the new `SpecDiscovery` configuration and will start looking for pods that match the criteria it has specified. Run the following command to retrieve your APISpecs. APISpecs are created from the ADA in response to finding a pod that matches, based on the `SpecDiscovery` match criteria.
+7. The `ampc-hybrid-ada` pod will see the new `SpecDiscovery` configuration and will start looking for pods that match the criteria it has specified. Run the following command to retrieve your APISpecs. APISpecs are created from the ADA in response to finding a pod that matches, based on the `SpecDiscovery` match criteria.
 
    ```bash
    axway central get apispecs -s <YOUR-K8SCLUSTER-NAME> -o yaml
@@ -537,7 +537,7 @@ Follow these steps to configure a resource discovery agent:
 2. Update the `metadata.scope.name` field to reflect the same name given to the K8SCluster. This links the ResourceDiscoveries to the K8SCluster. To verify the K8SCluster name that is being used for the ADA, run:
 
    ```bash
-   ~ » kubectl set env deployment/apic-hybrid-rda --list -n apic-control | grep CLUSTERNAME
+   ~ » kubectl set env deployment/ampc-hybrid-rda --list -n apic-control | grep CLUSTERNAME
    CLUSTERNAME=k8s-mesh
    ```
 
@@ -573,11 +573,11 @@ To discover pods and services, follow these steps:
    ```bash
    ~ » kubectl get pods -n apic-control
    NAME                               READY   STATUS    RESTARTS   AGE
-   apic-hybrid-ada-6cdc497bdf-r2zht   1/1     Running   0          50m
-   apic-hybrid-rda-69ddfbd88c-9pws2   1/1     Running   0          50m
+   ampc-hybrid-ada-6cdc497bdf-r2zht   1/1     Running   0          50m
+   ampc-hybrid-rda-69ddfbd88c-9pws2   1/1     Running   0          50m
    ```
 
-   You should see a pod named `apic-hybrid-rda` in running status.
+   You should see a pod named `ampc-hybrid-rda` in running status.
 3. To match the pod, add a label to the pod to make it discoverable by the discovery agent. This label must be defined in the `spec.resourceFilter.matchLabels` field so that the `ResourceDiscovery` agent can find it. In this example, we will add `discover=true` to the pod labels:
 
    ```bash
@@ -622,10 +622,10 @@ To discover pods and services, follow these steps:
    ✔ Resource(s) has successfully been retrieved
 
    NAME                                             AGE         TITLE                      SCOPE KIND  SCOPE NAME
-   pod.apic-demo.apic-hybrid-list-598f8f9b4b-jb7ds  an hour ago        pod-cli-1605565746103      K8SCluster  k8s-mesh
+   pod.apic-demo.ampc-hybrid-list-598f8f9b4b-jb7ds  an hour ago        pod-cli-1605565746103      K8SCluster  k8s-mesh
    pod.sunset-demo.sunset-749ddd444-ld7rf           a few seconds ago  sunset-pod-discovery       K8SCluster  k8s-mesh
    service.sunset-demo.sunset                       a few seconds ago  sunset-service-discovery   K8SCluster  k8s-mesh
-   service.apic-demo.apic-hybrid-list               an hour ago        service-cli-1605565746103  K8SCluster  k8s-mesh
+   service.apic-demo.ampc-hybrid-list               an hour ago        service-cli-1605565746103  K8SCluster  k8s-mesh
    ```
 
 If you see two K8SResources that include the name `sunset-demo` that are scoped to your K8SCluster, then you have successfully configured the RDA to search your Kubernetes cluster for pods and services based on your own configuration in your ResourceDiscoveries.
