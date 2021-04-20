@@ -213,21 +213,15 @@ After you have created the key pairs and secrets, deploy the Axway proprietary s
 
 2. Change to the directory where you unzipped the hybrid kit:
 
-   ```
-   cd e4fd7216693f50360169492633ab0122/
-   ```
+   `cd e4fd7216693f50360169492633ab0122/`
 
 3.`Istioctl` is required for installing Istio. Istio version 1.8.2 is recommended and is compatible with the Axway mesh agents. If you have not previously added it to your client system, you can download `Istioctl` using the following command:
 
-   ```
-   curl -L https://istio.io/downloadIstio | ISTIO_VERSION=1.8.2 TARGET_ARCH=x86_64 sh -
-   ```
+   `curl -L https://istio.io/downloadIstio | ISTIO_VERSION=1.8.2 TARGET_ARCH=x86_64 sh -`
 
 4. Export the path where you downloaded `Istioctl` to start using it. Note the use of `$PWD` below and change it accordingly.
 
-   ```
-   export PATH=$PATH:$PWD/istio-1.8.2/bin
-   ```
+   `export PATH=$PATH:$PWD/istio-1.8.2/bin`
 
 5. Install Istio using `Istioctl`. This step can take several minutes to complete.
 
@@ -245,9 +239,7 @@ After you have created the key pairs and secrets, deploy the Axway proprietary s
 
 6. Verify that Istio is deployed successfully:
 
-   ```
-   kubectl get services -n istio-system
-   ```
+   `kubectl get services -n istio-system`
 
    The output of this command should list an domain edge gateway and a number of Istio services.
 
@@ -322,16 +314,13 @@ After you have created the key pairs and secrets, deploy the Axway proprietary s
 
 8. Verify that the mesh agents are deployed in the `apic-control` namespace:
 
-   ```
-    kubectl get services -n apic-control
-   ```
+    `kubectl get services -n apic-control`
 
     The output of this command should list the mesh agent services.
+    
 9. Verify that the list demo service is deployed in the `apic-demo` namespace:
 
-   ```
-   kubectl get services -n apic-demo
-   ```
+   `kubectl get services -n apic-demo`
 
    The output of this command should list the demo list service.
 
