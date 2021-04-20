@@ -33,7 +33,7 @@ The ALS agent has two modes; default and verbose. The default mode captures only
 
 The ALS Traceability Agent logs and publishes traffic within the Mesh. In order to generate traffic, we need to create certain custom resource definitions (CRDs) in the mesh.
 
-### Amplify Central Resources
+### Amplify Central resources
 
 In order to better filter transactions related to the services in the mesh, certain resources need to be created for each service running on the mesh - namely APIService, APIServiceRevision and APIServiceInstance. The APIService needs to include the attribute "externalAPIID" in its definition.
 
@@ -136,7 +136,7 @@ spec:
 Once configured, use the following command to populate the resources in Amplify Central:
 
  ```bash
-amplify central apply -f <fileName>.yaml 
+axway central apply -f <fileName>.yaml 
  ```
 
 ### Istio CRDs
