@@ -24,7 +24,7 @@ For more information, see [Install Axway Central CLI](/docs/central/cli_central/
 
 ## Overview
 
-The ALS Traceability Agent is installed into your Kubernetes cluster as part of deploying the `apicentral-hybrid` helm chart. The Traceability Agent (TA) sends metrics and logs for API activity back to Amplify Central so that you can monitor service activity and troubleshoot your services.
+The ALS Traceability Agent is installed into your Kubernetes cluster as part of deploying the `ampc-hybrid` helm chart. The Traceability Agent (TA) sends metrics and logs for API activity back to Amplify Central so that you can monitor service activity and troubleshoot your services.
 The agent publishes a summary of the transaction which can be seen in the API Observer. Once the transaction summary is expanded, you can see all the related spans within a transaction including the request and response headers for each.
 
 The ALS agent has two modes; default and verbose. The default mode captures only the headers specified in the EnvoyFilter and the verbose mode captures all the headers in request and response flows.
@@ -252,7 +252,7 @@ spec:
       uri: /api
     route:
     - destination:
-        host: apic-hybrid-list.apic-demo.svc.cluster.local
+        host: ampc-hybrid-list.apic-demo.svc.cluster.local
         port:
           number: 8080
  ```
@@ -308,7 +308,7 @@ curl -v http://demo.sandbox.axwaytest.net:8080/mylist/list
 
 ## Toggling the Traceability Agent
 
-After deploying the `apicentral-hybrid` helm chart to your Kubernetes cluster, you can see the ALS Traceability Agent running. The service is called `apic-hybrid-als`. During the step [Deploy your agents with the Axway CLI](/docs/central/mesh_management/deploy-your-agents-with-the-axway-cli/), you were able to select the mode for the ALS agent. If you want to switch the mode, use the following procedure.
+After deploying the `ampc-hybrid` helm chart to your Kubernetes cluster, you can see the ALS Traceability Agent running. The service is called `ampc-hybrid-als`. During the step [Deploy your agents with the Axway CLI](/docs/central/mesh_management/deploy-your-agents-with-the-axway-cli/), you were able to select the mode for the ALS agent. If you want to switch the mode, use the following procedure.
 
 **From default to verbose**:
 
@@ -331,7 +331,7 @@ After the Istio re-installation, run the following command to set the ALS agent'
 
   ```bash
 helm repo update
-helm upgrade --install --namespace apic-control apic-hybrid axway/apicentral-hybrid -f hybrid-override.yaml --set als.mode="verbose"
+helm upgrade --install --namespace apic-control ampchybrid axway/ampc-hybrid -f hybrid-override.yaml --set als.mode="verbose"
  ```
 
 **From verbose to default**:
@@ -355,7 +355,7 @@ After the Istio re-installation, run the following command to set the ALS agent'
 
   ```bash
 helm repo update
-helm upgrade --install --namespace apic-control apic-hybrid axway/apicentral-hybrid -f hybrid-override.yaml --set als.mode="default"
+helm upgrade --install --namespace apic-control ampc-hybrid axway/ampc-hybrid -f hybrid-override.yaml --set als.mode="default"
  ```
 
 In default mode the Traceability Agent can be configured to only capture certain request and response headers. By default, we capture all the headers specified in the EnvoyFilter configuration below. See "additional_request_headers_to_log" and "additional_response_headers_to_log" section.
@@ -392,8 +392,8 @@ spec:
                     log_name: mesh
                     grpc_service:
                       google_grpc:
-                        target_uri: apic-hybrid-als.apic-control.svc.cluster.local:9000
-                        stat_prefix: apic-hybrid-als
+                        target_uri: ampc-hybrid-als.apic-control.svc.cluster.local:9000
+                        stat_prefix: ampc-hybrid-als
  ```
 
 To exclude any headers, remove them from "additional_request_headers_to_log" and "additional_response_headers_to_log". Please note that unless otherwise specified envoyFilterNamespace is "istio-system". Once the configuration is changed, run the following command:
@@ -472,7 +472,7 @@ als:
 Put your sanitization configuration into a file and then execute the following command:
 
 ```bash
-helm upgrade --install apic-hybrid axway/apicentral-hybrid --namespace apic-control -f hybrid-override.yaml -f <pathToConfigFile>/config.yaml
+helm upgrade --install ampc-hybrid axway/ampc-hybrid --namespace apic-control -f hybrid-override.yaml -f <pathToConfigFile>/config.yaml
 ```
 
 Monitor whether the ALS Traceability Agent pods have restarted by executing the following command:
