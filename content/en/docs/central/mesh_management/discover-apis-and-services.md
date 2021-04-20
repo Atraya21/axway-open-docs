@@ -82,7 +82,7 @@ The discovery agents use following resources:
 Run the following command to log into the Central CLI with your Amplify Platform credentials:
 
 ```shell
-axway auth login --client-id apicentral
+axway auth login
 ```
 
 A dialog box is shown. Enter your valid credentials (email address and password), and after the authorization successful message is displayed go back to the Axway CLI.
@@ -150,10 +150,10 @@ If you do not have the ADA and RDA configured, or if you would like the agents t
 5. Create the resources:
 
     ```bash
-    amplify central create -f ./environment.yaml
-    amplify central create -f ./mesh.yaml
-    amplify central create -f ./mesh-discovery.yaml
-    amplify central create -f ./k8s-cluster.yaml
+    axway central create -f ./environment.yaml
+    axway central create -f ./mesh.yaml
+    axway central create -f ./mesh-discovery.yaml
+    axway central create -f ./k8s-cluster.yaml
     ```
 
 6. If the commands were successful, you should see output indicating that the resources were created:
