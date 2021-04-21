@@ -18,7 +18,7 @@ This page will reference the resources created from the [Deploy your agents with
 These prerequisites are required by the Axway Central CLI, which you will use to configure the Istio discovery agents.
 
 * Node.js >= 10.13.0 and <= 12.14.1
-* Minimum Axway Central CLI version: 1.6.0 or later
+* Minimum Axway Central CLI version: 1.7.0 or later
 
 For more information, see [Install Axway Central CLI](/docs/central/cli_central/cli_install/).
 
