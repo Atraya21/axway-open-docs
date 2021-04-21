@@ -12,7 +12,7 @@ description: Use the Axway CLI to deploy Axway Istio agents.
 
 Ensure you have the following tools installed:
 
-* Axway Central CLI 1.6.0 or later
+* Axway Central CLI 1.7.0 or later
 * Helm 3.2.4 or later
 * Istioctl 1.8.2
 * Kubectl 1.18 or later
