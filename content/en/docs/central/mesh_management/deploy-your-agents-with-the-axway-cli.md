@@ -314,6 +314,7 @@ If Istio is already installed then no install command will be provided. Instead,
 Istio override file has been placed at /Users/Axway/istio-override.yaml
   Please merge the generated istio-override.yaml file with your Istio configuration to allow the Traceability Agent to function.
 ```
+If you want to install Istio in an Openshift Cluster, there are additional steps required. Please follow the steps in the [Istio docs](https://istio.io/latest/docs/setup/platform-setup/openshift/) for installing Istio into an OCP cluster. Istio has multiple profiles that can be used for installation. Select the appropriate profile and apply with the merged details from the CLI generated istio-override.yaml file.
 
 ## Finish the installation of the agents
 
